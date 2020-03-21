@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>17.验证表单信息 | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="17.验证表单信息 | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-17.验证表单信息" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">17.验证表单信息</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:22:35'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#构建"><span class="toc-text">构建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编码"><span class="toc-text">编码</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#创建一个PresonForm的Object类"><span class="toc-text">创建一个PresonForm的Object类</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#创建-web-Controller"><span class="toc-text">创建 web Controller</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#创建form表单"><span class="toc-text">创建form表单</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#注册成功的页面"><span class="toc-text">注册成功的页面</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#官网地址"><span class="toc-text">官网地址</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,142 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>在springboot中验证表单信息。在springmvc工程中，需要检查表单信息，表单信息验证主要通过注解的形式。</p>
+<h4 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h4><p>IDEA新建 选择  Web  Thymeleaf</p>
+<p>或者引入POM依赖</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-thymeleaf&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre><h4 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h4><h5 id="创建一个PresonForm的Object类"><a href="#创建一个PresonForm的Object类" class="headerlink" title="创建一个PresonForm的Object类"></a>创建一个PresonForm的Object类</h5><pre><code>import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-        </article>
-        
-        
+public class PersonForm {
+
+    @NotNull
+    @Size(min=2, max=30)
+    private String name;
+
+    @NotNull
+    @Min(18)
+    private Integer age;
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String toString() {
+        return &quot;Person(Name: &quot; + this.name + &quot;, Age: &quot; + this.age + &quot;)&quot;;
+    }
+}</code></pre><p>这个实体类，在2个属性:name,age.它们各自有验证的注解：</p>
+<ul>
+<li>@Size(min=2, max=30) name的长度为2-30个字符</li>
+<li>@NotNull 不为空</li>
+<li>@Min(18)age不能小于18</li>
+</ul>
+<h5 id="创建-web-Controller"><a href="#创建-web-Controller" class="headerlink" title="创建 web Controller"></a>创建 web Controller</h5><pre><code>@Controller
+public class WebController implements WebMvcConfigurer {
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController(&quot;/results&quot;).setViewName(&quot;results&quot;);
+    }
+
+    @GetMapping(&quot;/&quot;)
+    public String showForm(PersonForm personForm) {
+        return &quot;form&quot;;
+    }
+
+    @PostMapping(&quot;/&quot;)
+    public String checkPersonInfo(@Valid PersonForm personForm, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return &quot;form&quot;;
+        }
+
+        return &quot;redirect:/results&quot;;
+    }
+}</code></pre><h5 id="创建form表单"><a href="#创建form表单" class="headerlink" title="创建form表单"></a>创建form表单</h5><pre><code>&lt;html&gt;
+&lt;body&gt;
+&lt;form action=&quot;#&quot; th:action=&quot;@{/}&quot; th:object=&quot;${personForm}&quot; method=&quot;post&quot;&gt;
+    &lt;table&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Name:&lt;/td&gt;
+            &lt;td&gt;&lt;input type=&quot;text&quot; th:field=&quot;*{name}&quot; /&gt;&lt;/td&gt;
+            &lt;td th:if=&quot;${#fields.hasErrors(&#39;name&#39;)}&quot; th:errors=&quot;*{name}&quot;&gt;Name Error&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Age:&lt;/td&gt;
+            &lt;td&gt;&lt;input type=&quot;text&quot; th:field=&quot;*{age}&quot; /&gt;&lt;/td&gt;
+            &lt;td th:if=&quot;${#fields.hasErrors(&#39;age&#39;)}&quot; th:errors=&quot;*{age}&quot;&gt;Age Error&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><h5 id="注册成功的页面"><a href="#注册成功的页面" class="headerlink" title="注册成功的页面"></a>注册成功的页面</h5><pre><code>&lt;html&gt;
+&lt;body&gt;
+Congratulations! You are old enough to sign up for this site.
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><h5 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h5><p>启动工程，访问<a href="http://localhost:8080/：" target="_blank" rel="noopener">http://localhost:8080/：</a></p>
+<p><img src="images/validate1.png" alt="图1"></p>
+<p>输入错误信息的</p>
+<p><img src="images/validate2.png" alt="图2"></p>
+<p>这样输入</p>
+<p><img src="images/validate3.png" alt="图3"></p>
+<p>成功</p>
+<p><img src="images/validate4.png" alt="图4"></p>
+<h4 id="官网地址"><a href="#官网地址" class="headerlink" title="官网地址"></a>官网地址</h4><p><a href="https://spring.io/guides/gs/validating-form-input/" target="_blank" rel="noopener">https://spring.io/guides/gs/validating-form-input/</a></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>17.验证表单信息</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:43</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:22:35</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/17.%E9%AA%8C%E8%AF%81%E8%A1%A8%E5%8D%95%E4%BF%A1%E6%81%AF/" title="17.验证表单信息">https://xiaofine1122.github.io/2020/03/21/17.%E9%AA%8C%E8%AF%81%E8%A1%A8%E5%8D%95%E4%BF%A1%E6%81%AF/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>

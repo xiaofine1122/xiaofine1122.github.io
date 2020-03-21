@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>2.SpringBoot用JdbcTemplates访问Mysql | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="2.SpringBoot用JdbcTemplates访问Mysql | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-2.SpringBoot用JdbcTemplates访问Mysql" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">2.SpringBoot用JdbcTemplates访问Mysql</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:20:41'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#准备"><span class="toc-text">准备</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构建"><span class="toc-text">构建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#配置连接属性"><span class="toc-text">配置连接属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#具体编码"><span class="toc-text">具体编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#问题1："><span class="toc-text">问题1：</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,233 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>先启动mysql<br>mysql版本为： 8.0.16 MySQL Community Server</p>
+<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><p>IDEA新建项目是选择 web  JDBC MYSQL</p>
+<p>或者直接maven添加依赖</p>
+<pre><code>&lt;dependency&gt;
+&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-jdbc&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre><p>最后添加druid 连接池</p>
+<pre><code>&lt;dependency&gt;    
+    &lt;groupId&gt;com.alibaba&lt;/groupId&gt;    
+    &lt;artifactId&gt;druid &lt;/artifactId&gt;    
+    &lt;version&gt;1.1.21&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><h4 id="配置连接属性"><a href="#配置连接属性" class="headerlink" title="配置连接属性"></a>配置连接属性</h4><p>application.yml</p>
+<pre><code>spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://192.168.1.107:3306/entity?serverTimezone=GMT%2B8&amp;useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource</code></pre><h4 id="具体编码"><a href="#具体编码" class="headerlink" title="具体编码"></a>具体编码</h4><p>dao server controller三层结构</p>
+<p>模型类</p>
+<pre><code>public class User {
 
-        </article>
-        
-        
+    private int id;
+
+    private String name ;
+
+    private String email;
+
+    省略 setter getter toString
+}</code></pre><p>dao层</p>
+<pre><code>public interface UserDao {
+
+    int add(User user);
+
+    int update(User user);
+
+    int delete(int id);
+
+    User findUserById(int id);
+
+    List&lt;User&gt; findAllUsers();
+}</code></pre><p>dao实现类</p>
+<pre><code>@Repository
+public class UserDaoImpl implements UserDao {
+
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Override
+    public int add(User user) {
+        return jdbcTemplate.update(&quot;insert into user(name,email) values(?,?)&quot;,user.getName(),user.getEmail());
+    }
+
+    @Override
+    public int update(User user) {
+        return jdbcTemplate.update(&quot;update user SET name =?,email=? WHERE id=?&quot;,user.getName(),user.getEmail(),user.getId());
+    }
+
+    @Override
+    public int delete(int id) {
+        return jdbcTemplate.update(&quot;DELETE from user where id=?&quot;,id);
+    }
+
+    @Override
+    public User findUserById(int id) {
+        List&lt;User&gt; list = jdbcTemplate.query(&quot;SELECT * FROM user where id =?&quot;,new Object[]{id}, new BeanPropertyRowMapper(User.class));
+        if(list!=null &amp;&amp; list.size()&gt;0){
+            return list.get(0);
+        }else{
+            return null;
+        }
+    }
+
+    @Override
+    public List&lt;User&gt; findAllUsers() {
+        List&lt;User&gt; list = jdbcTemplate.query(&quot;SELECT * FROM user &quot;,new BeanPropertyRowMapper(User.class));
+        if(list!=null &amp;&amp; list.size()&gt;0){
+            return list;
+        }else{
+            return null;
+        }
+    }
+}</code></pre><p>server层</p>
+<pre><code>public interface UserService {
+
+    int add(User user);
+
+    int update(User user);
+
+    int delete(int id);
+
+    User findUserById(int id);
+
+    List&lt;User&gt; findAllUsers();
+}</code></pre><p>server层实现类</p>
+<pre><code>@Service
+public class UserServiceImpl implements UserService {
+
+    @Autowired
+    UserDao userDao;
+
+
+    @Override
+    public int add(User user) {
+        return userDao.add(user);
+    }
+
+    @Override
+    public int update(User user) {
+        return userDao.update(user);
+    }
+
+    @Override
+    public int delete(int id) {
+        return userDao.delete(id);
+    }
+
+    @Override
+    public User findUserById(int id) {
+        return userDao.findUserById(id);
+    }
+
+    @Override
+    public List&lt;User&gt; findAllUsers() {
+        return userDao.findAllUsers();
+    }
+}</code></pre><p>controller<br>restful构建api的风格</p>
+<pre><code>@RestController
+@RequestMapping(&quot;/user&quot;)
+public class UserController {
+
+    @Autowired
+    UserService userService;
+
+    @RequestMapping(value = &quot;&quot;,method = RequestMethod.POST)
+    public String addUser(@RequestParam(value = &quot;name&quot;)String name,
+                   @RequestParam(value = &quot;email&quot;)String email){
+        User user =new User();
+        user.setName(name);
+        user.setEmail(email);
+
+        int t = userService.add(user);
+        if(t==1){
+            return user.toString();
+        }else {
+            return &quot;fail&quot;;
+        }
+    }
+
+    @RequestMapping(value=&quot;/{id}&quot;,method = RequestMethod.PUT)
+    public String updateUser(@PathVariable(&quot;id&quot;) int id ,
+                             @RequestParam(value = &quot;name&quot;,required = true)String name,
+                             @RequestParam(value = &quot;email&quot;,required = true) String email){
+        User user =new User();
+        user.setId(id);
+        user.setName(name);
+        user.setEmail(email);
+        int t = userService.update(user);
+        if(t==1){
+            return user.toString();
+        }else {
+            return &quot;fail&quot;;
+        }
+    }
+
+    //默认不写是GET请求
+    @RequestMapping(&quot;delete/{id}&quot;)
+    public String deleteUser(@PathVariable(&quot;id&quot;) int id){
+        int t = userService.delete(id);
+        if(t==1){
+            return &quot;succese delete&quot;+id;
+        }else {
+            return &quot;fail&quot;;
+        }
+    }
+
+
+    @RequestMapping(value = &quot;/{id}&quot;,method = RequestMethod.GET)
+    public User getUserById(@PathVariable(&quot;id&quot;) int id){
+        return userService.findUserById(id);
+    }
+
+    @RequestMapping(value=&quot;list&quot;,method = RequestMethod.GET)
+    public List&lt;User&gt; getUsers(){
+        return userService.findAllUsers();
+    }
+}</code></pre><h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>使用postman 或者IDEA自带的 IDEA REST Client</p>
+<h5 id="问题1："><a href="#问题1：" class="headerlink" title="问题1："></a>问题1：</h5><p>连接mysql8以上需要使用<br>com.mysql.cj.jdbc.Driver<br>url需要指定时区serverTimezone=GMT</p>
+<pre><code>jdbc:mysql://192.168.168.101:3306/mysql?serverTimezone=GMT%2B8&amp;useSSL=false</code></pre><p>如果设定serverTimezone=UTC，会比中国时间早8个小时，如果在中国，可以选择Asia/Shanghai或者Asia/Hongkong，或GMT%2B8</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>2.SpringBoot用JdbcTemplates访问Mysql</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:58</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:20:41</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/2.SpringBoot%E7%94%A8JdbcTemplates%E8%AE%BF%E9%97%AEMysql/" title="2.SpringBoot用JdbcTemplates访问Mysql">https://xiaofine1122.github.io/2020/03/21/2.SpringBoot%E7%94%A8JdbcTemplates%E8%AE%BF%E9%97%AEMysql/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>

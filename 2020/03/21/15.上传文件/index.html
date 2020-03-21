@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>15.上传文件 | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="15.上传文件 | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-15.上传文件" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">15.上传文件</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:22:21'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#构建"><span class="toc-text">构建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#编码"><span class="toc-text">编码</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#定义可能出现的错误类"><span class="toc-text">定义可能出现的错误类</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#创建文件上传controller"><span class="toc-text">创建文件上传controller</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#官方文档"><span class="toc-text">官方文档</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#问题1："><span class="toc-text">问题1：</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,255 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><p>IDEA新建选择 Web Thymeleaf</p>
+<p>或者添加POM依赖</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-thymeleaf&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre><h4 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h4><p>定义上传的配置</p>
+<pre><code>@Configuration
+@ConfigurationProperties(&quot;storage&quot;)
+public class StorageProperties {
 
-        </article>
-        
-        
+    /**
+     * Folder location for storing files
+     */
+    private String location = &quot;upload-dir&quot;;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+}</code></pre><p>创建上传的service</p>
+<pre><code>public interface StorageService {
+
+    void init();
+
+    void store(MultipartFile file);
+
+    Stream&lt;Path&gt; loadAll();
+
+    Path load(String filename);
+
+    Resource loadAsResource(String filename);
+
+    void deleteAll();
+}</code></pre><p>实现service</p>
+<pre><code>@Service
+public class FileSystemStorageService implements StorageService {
+
+    private final Path rootLocation;
+
+    @Autowired
+    public FileSystemStorageService(StorageProperties properties) {
+        this.rootLocation = Paths.get(properties.getLocation());
+    }
+
+    @Override
+    public void store(MultipartFile file) {
+        try {
+            if (file.isEmpty()) {
+                throw new StorageException(&quot;Failed to store empty file &quot; + file.getOriginalFilename());
+            }
+            Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
+        } catch (IOException e) {
+            throw new StorageException(&quot;Failed to store file &quot; + file.getOriginalFilename(), e);
+        }
+    }
+
+    @Override
+    public Stream&lt;Path&gt; loadAll() {
+        try {
+            return Files.walk(this.rootLocation, 1)
+                    .filter(path -&gt; !path.equals(this.rootLocation))
+                    .map(path -&gt; this.rootLocation.relativize(path));
+        } catch (IOException e) {
+            throw new StorageException(&quot;Failed to read stored files&quot;, e);
+        }
+
+    }
+
+    @Override
+    public Path load(String filename) {
+        return rootLocation.resolve(filename);
+    }
+
+    @Override
+    public Resource loadAsResource(String filename) {
+        try {
+            Path file = load(filename);
+            Resource resource = new UrlResource(file.toUri());
+            if(resource.exists() || resource.isReadable()) {
+                return resource;
+            }
+            else {
+                throw new StorageFileNotFoundException(&quot;Could not read file: &quot; + filename);
+
+            }
+        } catch (MalformedURLException e) {
+            throw new StorageFileNotFoundException(&quot;Could not read file: &quot; + filename, e);
+        }
+    }
+
+    @Override
+    public void deleteAll() {
+        FileSystemUtils.deleteRecursively(rootLocation.toFile());
+    }
+
+    @Override
+    public void init() {
+        try {
+            Files.createDirectory(rootLocation);
+        } catch (IOException e) {
+            throw new StorageException(&quot;Could not initialize storage&quot;, e);
+        }
+    }
+}</code></pre><h5 id="定义可能出现的错误类"><a href="#定义可能出现的错误类" class="headerlink" title="定义可能出现的错误类"></a>定义可能出现的错误类</h5><pre><code>public class StorageException extends RuntimeException{
+
+    public StorageException(String message) {
+        super(message);
+    }
+
+    public StorageException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}</code></pre><pre><code>public class StorageFileNotFoundException extends StorageException {
+
+    public StorageFileNotFoundException(String message) {
+        super(message);
+    }
+
+    public StorageFileNotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}</code></pre><h5 id="创建文件上传controller"><a href="#创建文件上传controller" class="headerlink" title="创建文件上传controller"></a>创建文件上传controller</h5><pre><code>@Controller
+public class FileUploadController {
+
+    private final StorageService storageService;
+
+    @Autowired
+    public FileUploadController(StorageService storageService) {
+        this.storageService = storageService;
+    }
+
+    @GetMapping(&quot;/&quot;)
+    public String listUploadedFiles(Model model) throws IOException {
+
+        model.addAttribute(&quot;files&quot;, storageService
+                .loadAll()
+                .map(path -&gt;
+                        MvcUriComponentsBuilder
+                                .fromMethodName(FileUploadController.class, &quot;serveFile&quot;, path.getFileName().toString())
+                                .build().toString())
+                .collect(Collectors.toList()));
+
+        return &quot;uploadForm&quot;;
+    }
+
+    @GetMapping(&quot;/files/{filename:.+}&quot;)
+    @ResponseBody
+    public ResponseEntity&lt;Resource&gt; serveFile(@PathVariable String filename) {
+
+        Resource file = storageService.loadAsResource(filename);
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, &quot;attachment; filename=\&quot;&quot;+file.getFilename()+&quot;\&quot;&quot;)
+                .body(file);
+    }
+
+    @PostMapping(&quot;/&quot;)
+    public String handleFileUpload(@RequestParam(&quot;file&quot;) MultipartFile file,
+                                   RedirectAttributes redirectAttributes) {
+
+        storageService.store(file);
+        redirectAttributes.addFlashAttribute(&quot;message&quot;,
+                &quot;You successfully uploaded &quot; + file.getOriginalFilename() + &quot;!&quot;);
+
+        return &quot;redirect:/&quot;;
+    }
+
+    @ExceptionHandler(StorageFileNotFoundException.class)
+    public ResponseEntity handleStorageFileNotFound(StorageFileNotFoundException exc) {
+        return ResponseEntity.notFound().build();
+    }
+
+}</code></pre><p>这个类通过@Controller注解，表明自己上一个Spring mvc的c。每个方法通过 @GetMapping 或者@PostMapping注解表明自己的 http方法。</p>
+<ul>
+<li>GET / 获取已经上传的文件列表</li>
+<li>GET /files/{filename} 下载已经存在于服务器的文件</li>
+<li>POST / 上传文件给服务器</li>
+</ul>
+<p>创建一个简单的 html模板为了展示上传文件的过程，我们做一个界面： 在src/main/resources/templates/uploadForm.html</p>
+<pre><code>&lt;html xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;body&gt;
+
+&lt;div th:if=&quot;${message}&quot;&gt;
+    &lt;h2 th:text=&quot;${message}&quot;/&gt;
+&lt;/div&gt;
+
+&lt;div&gt;
+    &lt;form method=&quot;POST&quot; enctype=&quot;multipart/form-data&quot; action=&quot;/&quot;&gt;
+        &lt;table&gt;
+            &lt;tr&gt;&lt;td&gt;File to upload:&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;file&quot; name=&quot;file&quot; /&gt;&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;submit&quot; value=&quot;Upload&quot; /&gt;&lt;/td&gt;&lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/form&gt;
+&lt;/div&gt;
+
+&lt;div&gt;
+    &lt;ul&gt;
+        &lt;li th:each=&quot;file : ${files}&quot;&gt;
+            &lt;a th:href=&quot;${file}&quot; th:text=&quot;${file}&quot; /&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>上传文件大小限制如果需要限制上传文件的大小也很简单，只需要在springboot 工程的src/main/resources/application.properties 加入以下：</p>
+<pre><code>spring.servlet.multipart.max-file-size=128KB
+spring.servlet.multipart.max-request-size=128KB</code></pre><h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>访问<a href="http://localhost:8080/" target="_blank" rel="noopener">http://localhost:8080/</a></p>
+<h4 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h4><p><a href="https://spring.io/guides/gs/uploading-files/" target="_blank" rel="noopener">https://spring.io/guides/gs/uploading-files/</a></p>
+<h4 id="问题1："><a href="#问题1：" class="headerlink" title="问题1："></a>问题1：</h4><p>官方样例代码里StorageProperties 只有 @ConfigurationProperties<br>但是IDEA总报错，增加@Configuration后解决</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>15.上传文件</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:45</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:22:21</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/15.%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" title="15.上传文件">https://xiaofine1122.github.io/2020/03/21/15.%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>

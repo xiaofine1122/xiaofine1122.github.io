@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>16.定时任务（Scheduling Tasks） | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="16.定时任务（Scheduling Tasks） | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-16.定时任务（Scheduling Tasks）" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">16.定时任务（Scheduling Tasks）</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:22:27'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#构建工程"><span class="toc-text">构建工程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编码"><span class="toc-text">编码</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#创建定时任务"><span class="toc-text">创建定时任务</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#官方文档"><span class="toc-text">官方文档</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,78 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>将介绍怎么通过spring去做调度任务。</p>
+<h4 id="构建工程"><a href="#构建工程" class="headerlink" title="构建工程"></a>构建工程</h4><p>创建一个Springboot工程</p>
+<h4 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h4><p>在它的程序入口加上@EnableScheduling,开启调度任务。</p>
+<pre><code>@SpringBootApplication
+@EnableScheduling
+public class SchedulingTasksApplication {
 
-        </article>
-        
-        
+    public static void main(String[] args) {
+        SpringApplication.run(SchedulingTasksApplication.class, args);
+    }
+
+}</code></pre><h5 id="创建定时任务"><a href="#创建定时任务" class="headerlink" title="创建定时任务"></a>创建定时任务</h5><pre><code>@Component
+public class ScheduledTasks {
+
+    public static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+
+    public static final SimpleDateFormat dateFormat = new SimpleDateFormat(&quot;HH:mm:ss&quot;);
+
+    @Scheduled(fixedDelay = 5000)
+    public void reportCurrentTime(){
+        log.info(&quot;The time is now {}&quot;, dateFormat.format(new Date()));
+    }
+}</code></pre><p>通过在方法上加@Scheduled注解，表明该方法是一个调度任务。</p>
+<ul>
+<li>@Scheduled(fixedRate = 5000) ：上一次开始执行时间点之后5秒再执行</li>
+<li>@Scheduled(fixedDelay = 5000) ：上一次执行完毕时间点之后5秒再执行</li>
+<li>@Scheduled(initialDelay=1000, fixedRate=5000) ：第一次延迟1秒后执行，之后按fixedRate的规则每5秒执行一次</li>
+<li>@Scheduled(cron=” /5 “) ：通过cron表达式定义规则，什么是cro表达式，自行搜索。</li>
+</ul>
+<h5 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h5><p>启动springboot工程，控制台没过5s就打印出了当前的时间。</p>
+<pre><code>2020-03-15 17:18:46.448  INFO 15296 --- [   scheduling-1] c.x.schedulingtasks.task.ScheduledTasks  : The time is now 17:18:46
+2020-03-15 17:18:46.450  INFO 15296 --- [           main] c.x.s.SchedulingTasksApplication         : Started SchedulingTasksApplication in 0.54 seconds (JVM running for 1.17)
+2020-03-15 17:18:51.451  INFO 15296 --- [   scheduling-1] c.x.schedulingtasks.task.ScheduledTasks  : The time is now 17:18:51
+2020-03-15 17:18:56.453  INFO 15296 --- [   scheduling-1] c.x.schedulingtasks.task.ScheduledTasks  : The time is now 17:18:56
+2020-03-15 17:19:01.454  INFO 15296 --- [   scheduling-1] c.x.schedulingtasks.task.ScheduledTasks  : The time is now 17:19:01
+2020-03-15 17:19:06.456  INFO 15296 --- [   scheduling-1] c.x.schedulingtasks.task.ScheduledTasks  : The time is now 17:19:06
+2020-03-15 17:19:11.457  INFO 15296 --- [   scheduling-1] c.x.schedulingtasks.task.ScheduledTasks  : The time is now 17:19:11
+2020-03-15 17:19:16.459  INFO 15296 --- [   scheduling-1] c.x.schedulingtasks.task.ScheduledTasks  : The time is now 17:19:16</code></pre><h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>在springboot创建定时任务比较简单，只需2步：</p>
+<p>1.在程序的入口加上@EnableScheduling注解。<br>2.在定时方法上加@Scheduled注解。</p>
+<h4 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h4><p><a href="https://spring.io/guides/gs/scheduling-tasks/" target="_blank" rel="noopener">https://spring.io/guides/gs/scheduling-tasks/</a></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>16.定时任务（Scheduling Tasks）</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:44</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:22:27</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/16.%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%EF%BC%88Scheduling%20Tasks%EF%BC%89/" title="16.定时任务（Scheduling Tasks）">https://xiaofine1122.github.io/2020/03/21/16.%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%EF%BC%88Scheduling%20Tasks%EF%BC%89/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>

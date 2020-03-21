@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>11.SpringBoot集成spring cache | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="11.SpringBoot集成spring cache | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-11.SpringBoot集成spring cache" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">11.SpringBoot集成spring cache</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:21:54'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#声明式缓存"><span class="toc-text">声明式缓存</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构建"><span class="toc-text">构建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#编码"><span class="toc-text">编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#官方文档："><span class="toc-text">官方文档：</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,140 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><h5 id="声明式缓存"><a href="#声明式缓存" class="headerlink" title="声明式缓存"></a>声明式缓存</h5><p>Spring 定义 CacheManager 和 Cache 接口用来统一不同的缓存技术。例如 JCache、 EhCache、 Hazelcast、 Guava、 Redis 等。在使用 Spring 集成 Cache 的时候，我们需要注册实现的 CacheManager 的 Bean。</p>
+<p>Spring Boot 为我们自动配置了 JcacheCacheConfiguration、 EhCacheCacheConfiguration、HazelcastCacheConfiguration、GuavaCacheConfiguration、RedisCacheConfiguration、SimpleCacheConfiguration 等。</p>
+<p>在我们不使用其他第三方缓存依赖的时候，springboot自动采用ConcurrenMapCacheManager作为缓存管理器。</p>
+<p>在我们不使用其他第三方缓存依赖的时候，springboot自动采用ConcurrenMapCacheManager作为缓存管理器。</p>
+<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><p>IDEA新建 勾选 I/O下 Spring cache abstraction</p>
+<p>或者直接引入依赖</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre><h4 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h4><p>先创建一个实体类</p>
+<pre><code> public class Book {
 
-        </article>
-        
-        
+    private String isbn;
+    private String title;
+
+    public Book(String isbn, String title) {
+        this.isbn = isbn;
+        this.title = title;
+    }
+  ....getter
+  ....setter  
+
+ }</code></pre><p>创建一个数据访问接口</p>
+<pre><code>public interface BookRepository {
+
+    Book getByIsbn(String isbn);
+
+}</code></pre><p>这个你可以写一个很复杂的数据查询操作，比如操作mysql、nosql等等。为了演示这个栗子，我只做了一下线程的延迟操作，当作是查询数据库的时间。</p>
+<p>实现接口类：</p>
+<pre><code>@Component
+public class SimpleBookRepository implements BookRepository {
+
+    @Override
+    public Book getByIsbn(String isbn) {
+        simulateSlowService();
+        return new Book(isbn, &quot;Some book&quot;);
+    }
+
+    // Don&#39;t do this at home
+    private void simulateSlowService() {
+        try {
+            long time = 3000L;
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+}</code></pre><p>测试类</p>
+<pre><code>@Component
+public class AppRunner implements CommandLineRunner {
+
+    private static final Logger logger = LoggerFactory.getLogger(AppRunner.class);
+
+    private final BookRepository bookRepository;
+
+    public AppRunner(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        logger.info(&quot;.... Fetching books&quot;);
+        logger.info(&quot;isbn-1234 --&gt;&quot; + bookRepository.getByIsbn(&quot;isbn-1234&quot;));
+        logger.info(&quot;isbn-4567 --&gt;&quot; + bookRepository.getByIsbn(&quot;isbn-4567&quot;));
+        logger.info(&quot;isbn-1234 --&gt;&quot; + bookRepository.getByIsbn(&quot;isbn-1234&quot;));
+        logger.info(&quot;isbn-4567 --&gt;&quot; + bookRepository.getByIsbn(&quot;isbn-4567&quot;));
+        logger.info(&quot;isbn-1234 --&gt;&quot; + bookRepository.getByIsbn(&quot;isbn-1234&quot;));
+        logger.info(&quot;isbn-1234 --&gt;&quot; + bookRepository.getByIsbn(&quot;isbn-1234&quot;));
+    }
+}</code></pre><h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>之后启动主程序 SpringbootCacheApplication</p>
+<p>控制台输出</p>
+<pre><code>2020-03-15 10:00:34.524  INFO ...: .... Fetching books
+2020-03-15 10:00:37.524  INFO ...: isbn-1234 --&gt;Book{isbn=&#39;isbn-1234&#39;, title=&#39;Some book&#39;}
+2020-03-15 10:00:40.525  INFO ...: isbn-4567 --&gt;Book{isbn=&#39;isbn-4567&#39;, title=&#39;Some book&#39;}
+2020-03-15 10:00:43.526  INFO ...: isbn-1234 --&gt;Book{isbn=&#39;isbn-1234&#39;, title=&#39;Some book&#39;}
+2020-03-15 10:00:46.527  INFO ...: isbn-4567 --&gt;Book{isbn=&#39;isbn-4567&#39;, title=&#39;Some book&#39;}
+2020-03-15 10:00:49.528  INFO ...: isbn-1234 --&gt;Book{isbn=&#39;isbn-1234&#39;, title=&#39;Some book&#39;}
+2020-03-15 10:00:52.529  INFO ...: isbn-1234 --&gt;Book{isbn=&#39;isbn-1234&#39;, title=&#39;Some book&#39;}</code></pre><p>在程序的入口中加入@ EnableCaching开启缓存技术：</p>
+<pre><code>@SpringBootApplication
+@EnableCaching
+public class SpringbootCacheApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SpringbootCacheApplication.class, args);
+    }
+}</code></pre><p>在需要缓存的地方加入@Cacheable注解，比如在SimpleBookRepository</p>
+<p>.getByIsbn（）方法上加入@Cacheable(“books”)，这个方法就开启了缓存策略，当缓存有这个数据的时候，会直接返回数据，不会等待去查询数据库。</p>
+<pre><code> @Override
+    @Cacheable(&quot;books&quot;)
+    public Book getByIsbn(String isbn) {
+        simulateSlowService();
+        return new Book(isbn, &quot;Some book&quot;);
+    }</code></pre><p>这时再启动程序，你会发现程序打印：</p>
+<pre><code>2020-03-15 10:03:09.559  INFO 1704 --- [main] ...: .... Fetching books
+2020-03-15 10:03:12.564  INFO 1704 --- [main] ...: isbn-1234 --&gt;Book{isbn=&#39;isbn-1234&#39;, title=&#39;Some book&#39;}
+2020-03-15 10:03:15.565  INFO 1704 --- [main] ...: isbn-4567 --&gt;Book{isbn=&#39;isbn-4567&#39;, title=&#39;Some book&#39;}
+2020-03-15 10:03:15.566  INFO 1704 --- [main] ...: isbn-1234 --&gt;Book{isbn=&#39;isbn-1234&#39;, title=&#39;Some book&#39;}
+2020-03-15 10:03:15.566  INFO 1704 --- [main] ...: isbn-4567 --&gt;Book{isbn=&#39;isbn-4567&#39;, title=&#39;Some book&#39;}
+2020-03-15 10:03:15.566  INFO 1704 --- [main] ...: isbn-1234 --&gt;Book{isbn=&#39;isbn-1234&#39;, title=&#39;Some book&#39;}
+2020-03-15 10:03:15.566  INFO 1704 --- [main] ...: isbn-1234 --&gt;Book{isbn=&#39;isbn-1234&#39;, title=&#39;Some book&#39;}</code></pre><p>只有打印前面2个数据，程序等了3s，之后的数据瞬间打印在控制台上了，这说明缓存起了作用。</p>
+<h4 id="官方文档："><a href="#官方文档：" class="headerlink" title="官方文档："></a>官方文档：</h4><p><a href="https://spring.io/guides/gs/caching/" target="_blank" rel="noopener">https://spring.io/guides/gs/caching/</a></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>11.SpringBoot集成spring cache</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:49</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:21:54</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/11.SpringBoot%E9%9B%86%E6%88%90spring%20cache/" title="11.SpringBoot集成spring cache">https://xiaofine1122.github.io/2020/03/21/11.SpringBoot%E9%9B%86%E6%88%90spring%20cache/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>

@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>10.SpringBoot集成apidoc | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="10.SpringBoot集成apidoc | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-10.SpringBoot集成apidoc" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">10.SpringBoot集成apidoc</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:21:48'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前提"><span class="toc-text">前提</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#注释怎么写"><span class="toc-text">注释怎么写</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-text">例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#构建"><span class="toc-text">构建</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,85 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h3><p>先安装 node.js<br>通过命令安装</p>
+<pre><code>npm install apidoc -g</code></pre><p>windows下 安装之后会报下面错， 忽略就好</p>
+<pre><code>npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@2.1.2 (node_modules\apidoc\node_modules\fsevents):
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@2.1.2: wanted {&quot;os&quot;:&quot;darwin&quot;,&quot;arch&quot;:&quot;any&quot;} (current: {&quot;os&quot;:&quot;win32&quot;,&quot;arch
+&quot;:&quot;x64&quot;})
+</code></pre><p>测试安装上了</p>
+<pre><code>apidoc -h</code></pre><h4 id="注释怎么写"><a href="#注释怎么写" class="headerlink" title="注释怎么写"></a>注释怎么写</h4><p>@api</p>
+<pre><code>@api {method} path [title]
 
-        </article>
-        
-        
+method：请求方法，
+path：请求路径 
+title(可选)：标题</code></pre><p>@apiDescription</p>
+<pre><code>@apiDescription text
+text说明</code></pre><p>@apiError<br>`@apiError [(group)] [{type}] field [description]</p>
+<p>（group）（可选）：参数将以这个名称分组，不设置的话，默认是Error 4xx<br>{type}（可选）：返回值类型，例如：{Boolean}, {Number}, {String}, {Object}, {String[]}<br>field：返回值字段名称<br>descriptionoptional（可选）：返回值字段说明`</p>
+<p>@apiGroup</p>
+<pre><code>@apiGroup name
+name：组名称，也是导航的标题</code></pre><p>详见官方文档  <a href="https://apidocjs.com/#params" target="_blank" rel="noopener">https://apidocjs.com/#params</a></p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><h4 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h4><p>新建IDEA，选择web</p>
+<p>主目录新建 apidoc.json 文件 与src平级的<br>内容如下</p>
+<pre><code>{
+  &quot;name&quot;: &quot;example&quot;,
+  &quot;version&quot;: &quot;0.1.0&quot;,
+  &quot;description&quot;: &quot;A basic apiDoc example&quot;
+}</code></pre><p>更多配置参考：<a href="http://apidocjs.com/#configuration" target="_blank" rel="noopener">http://apidocjs.com/#configuration</a></p>
+<p>写注释</p>
+<pre><code>    /**
+     * @api {POST} /register 注册用户
+     * @apiGroup Users
+     * @apiVersion 0.0.1
+     * @apiDescription 用于注册用户
+     * @apiParam {String} account 用户账户名
+     * @apiParam {String} password 密码
+     * @apiParam {String} mobile 手机号
+     * @apiParam {int} vip = 0  是否注册Vip身份 0 普通用户 1 Vip用户
+     * @apiParam {String} [recommend] 邀请码
+     * @apiParamExample {json} 请求样例：
+     *                ?account=sodlinken&amp;password=11223344&amp;mobile=13739554137&amp;vip=0&amp;recommend=
+     * @apiSuccess (200) {String} msg 信息
+     * @apiSuccess (200) {int} code 0 代表无错误 1代表有错误
+     * @apiSuccessExample {json} 返回样例:
+     *                {&quot;code&quot;:&quot;0&quot;,&quot;msg&quot;:&quot;注册成功&quot;}
+     */</code></pre><p>先cd到工程的外层目录，并在外层目建个输出文档的目录，我建的是docapi。<br>输命令</p>
+<pre><code>apidoc -i springboot-apidoc/ -o docapi/</code></pre><p>-i 输入目录 -o 输出目录<br>生成文件</p>
+<p><img src="../images/apidoc1.png" alt="图1"></p>
+<p>打开 index.html</p>
+<p><img src="../images/apidoc2.png" alt="图2"></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>10.SpringBoot集成apidoc</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:50</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:21:48</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/10.SpringBoot%E9%9B%86%E6%88%90apidoc/" title="10.SpringBoot集成apidoc">https://xiaofine1122.github.io/2020/03/21/10.SpringBoot%E9%9B%86%E6%88%90apidoc/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>

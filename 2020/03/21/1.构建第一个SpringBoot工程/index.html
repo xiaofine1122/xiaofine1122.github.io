@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>1.构建第一个SpringBoot工程 | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="1.构建第一个SpringBoot工程 | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-1.构建第一个SpringBoot工程" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">1.构建第一个SpringBoot工程</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:20:33'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#构建"><span class="toc-text">构建</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#编写Controller"><span class="toc-text">编写Controller</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义配置文件"><span class="toc-text">自定义配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#编写controller"><span class="toc-text">编写controller</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#问题1：新建时maven总导入不了包"><span class="toc-text">问题1：新建时maven总导入不了包</span></a></li></ol></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,65 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。</p>
+<h4 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h4><p>使用工具 IDEA<br>maven<br>构建使用IDEA自带的 选择Spring Initalizr初始化<br>创建时勾选 Web</p>
+<h5 id="编写Controller"><a href="#编写Controller" class="headerlink" title="编写Controller"></a>编写Controller</h5><p>注意：路径需要在SpringbootFirstApplication 之后，不然扫描时扫描不到</p>
+<pre><code>package com.xiaofine.springbootfirst.controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+public class HelloController {    
+@RequestMapping(&quot;/&quot;)    
+public String index(){        
+return &quot;hello world&quot;;    
+}}</code></pre><p>之后运行SpringbootFirstApplication的main方法就可以启动服务了<br>之后访问<a href="http://localhost:8080/" target="_blank" rel="noopener">http://localhost:8080/</a><br>就能看到return里写的内容了</p>
+<h3 id="自定义配置文件"><a href="#自定义配置文件" class="headerlink" title="自定义配置文件"></a>自定义配置文件</h3><p>application.yml（ 或 application.properties） </p>
+<pre><code>my:  
+    name: xiao  
+    age: 12</code></pre><h5 id="编写controller"><a href="#编写controller" class="headerlink" title="编写controller"></a>编写controller</h5><pre><code>@RestController
+public class MyController {
+    @Value(&quot;${my.name}&quot;)
+    private String myname;
+    @Value(&quot;${my.age}&quot;)
+    private int age;
+    @RequestMapping(&quot;/my&quot;)
+    public String myname(){
+        return &quot;my name is&quot;+myname+&quot;age is &quot;+age;
+    }
+}</code></pre><p>注意 “:”后需要有空格<br>访问 <a href="http://localhost:8080/my" target="_blank" rel="noopener">http://localhost:8080/my</a> 就会显示 application中的内容</p>
+<h6 id="问题1：新建时maven总导入不了包"><a href="#问题1：新建时maven总导入不了包" class="headerlink" title="问题1：新建时maven总导入不了包"></a>问题1：新建时maven总导入不了包</h6><p>修改建议修改国内镜像源：<br><em>开始用的这个地址<a href="http://maven.aliyun.com/nexus/content/groups/public/结果好多依赖包没有，换成下面地址http://maven.aliyun.com/nexus/content/repositories/central/" target="_blank" rel="noopener">http://maven.aliyun.com/nexus/content/groups/public/结果好多依赖包没有，换成下面地址http://maven.aliyun.com/nexus/content/repositories/central/</a></em></p>
 
-        </article>
-        
-        
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>1.构建第一个SpringBoot工程</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:59</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:20:33</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/1.%E6%9E%84%E5%BB%BA%E7%AC%AC%E4%B8%80%E4%B8%AASpringBoot%E5%B7%A5%E7%A8%8B/" title="1.构建第一个SpringBoot工程">https://xiaofine1122.github.io/2020/03/21/1.%E6%9E%84%E5%BB%BA%E7%AC%AC%E4%B8%80%E4%B8%AASpringBoot%E5%B7%A5%E7%A8%8B/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>

@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>21.SpringBoot整合docker | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="21.SpringBoot整合docker | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-21.SpringBoot整合docker" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">21.SpringBoot整合docker</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:23:06'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#构建"><span class="toc-text">构建</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用maven打包项目成jar包"><span class="toc-text">使用maven打包项目成jar包</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-可以直接在界面操作"><span class="toc-text">1.可以直接在界面操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-使用命令打包"><span class="toc-text">2.使用命令打包</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#创建Dockerfile文件"><span class="toc-text">创建Dockerfile文件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#linux下"><span class="toc-text">linux下</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#官方文档"><span class="toc-text">官方文档</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#安装docker参考"><span class="toc-text">安装docker参考</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#dockerfile-命令的说明"><span class="toc-text">dockerfile 命令的说明</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#最后说明："><span class="toc-text">最后说明：</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,81 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>为 springboot程序构建一个docker镜像。docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从Apache2.0协议开源。Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app）,更重要的是容器性能开销极低。</p>
+<h5 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h5><p>Packaging 选择 jar<br>依赖选择web</p>
+<p>随便添加一个controller<br>如</p>
+<pre><code>@RestController
+public class HelloController {
 
-        </article>
-        
-        
+    @RequestMapping(&quot;/&quot;)
+    public String helloWorld(){
+        return  &quot;Hello World&quot;;
+    }
+}</code></pre><h4 id="使用maven打包项目成jar包"><a href="#使用maven打包项目成jar包" class="headerlink" title="使用maven打包项目成jar包"></a>使用maven打包项目成jar包</h4><h5 id="1-可以直接在界面操作"><a href="#1-可以直接在界面操作" class="headerlink" title="1.可以直接在界面操作"></a>1.可以直接在界面操作</h5><p><img src="../images/docker1.png" alt="图1"></p>
+<p>控制台打印的log里有jar包生成的位置</p>
+<h5 id="2-使用命令打包"><a href="#2-使用命令打包" class="headerlink" title="2.使用命令打包"></a>2.使用命令打包</h5><p>在项目跟目录下 执行下面命令也是一样的效果</p>
+<pre><code>mvn clean package</code></pre><h5 id="创建Dockerfile文件"><a href="#创建Dockerfile文件" class="headerlink" title="创建Dockerfile文件"></a>创建Dockerfile文件</h5><p><strong>注意文件没有后缀</strong>（官网说明<br><a href="https://docs.docker.com/engine/reference/builder/）" target="_blank" rel="noopener">https://docs.docker.com/engine/reference/builder/）</a></p>
+<pre><code># Pull base image
+FROM  java:8
+
+VOLUME /tmp
+
+# 添加
+ADD springboot-docker-0.0.1-SNAPSHOT.jar app.jar
+RUN bash -c &#39;touch /app.jar&#39;
+
+
+# Define default command.
+ENTRYPOINT [&quot;java&quot;,&quot;-Djava.security.egd=file:/dev/./urandom&quot;,&quot;-jar&quot;,&quot;/app.jar&quot;]
+
+#设置时区
+RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp; echo &#39;Asia/Shanghai&#39; &gt;/etc/timezone</code></pre><p>将dockerfile文件和生成好的jar 使用ftp工具上传到linux服务器 随便找个文件夹 放进去 jar和dockerfile在同级目录下</p>
+<p><img src="../images/docker2.png" alt="图2"></p>
+<h5 id="linux下"><a href="#linux下" class="headerlink" title="linux下"></a>linux下</h5><p>当前目录下执行</p>
+<pre><code>docker build -f DockerFile -t springboot-docker:v1.0 .</code></pre><p>如果 Dockerfile 文件名为 “Dockerfile”可以用下面命令</p>
+<pre><code>docker build -t springboot-docker:v1.0 .</code></pre><p>-f 表示 dockerfile 文件的文件路径<br>最后面的这个 . 代表在当前目录下面寻找 dockerfile 文件<br>springboot-docker   指镜像名字<br>v1.0 指版本</p>
+<p>然后使用 docker images 查看生成的镜像</p>
+<p><img src="../images/docker3.png" alt="图3"></p>
+<p>启动镜像</p>
+<pre><code>docker run -d -p 8080:8080 springboot-docker:v1.0</code></pre><h5 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h5><p>打开对应地址，成功</p>
+<p><img src="../images/docker4.png" alt="图4"></p>
+<h5 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h5><p><a href="https://docs.docker.com/engine/reference/builder/" target="_blank" rel="noopener">https://docs.docker.com/engine/reference/builder/</a></p>
+<h5 id="安装docker参考"><a href="#安装docker参考" class="headerlink" title="安装docker参考"></a>安装docker参考</h5><p><a href="https://www.runoob.com/docker/docker-tutorial.html" target="_blank" rel="noopener">https://www.runoob.com/docker/docker-tutorial.html</a></p>
+<h5 id="dockerfile-命令的说明"><a href="#dockerfile-命令的说明" class="headerlink" title="dockerfile 命令的说明"></a>dockerfile 命令的说明</h5><p><img src="../images/docker5.png" alt="图5"></p>
+<h5 id="最后说明："><a href="#最后说明：" class="headerlink" title="最后说明："></a>最后说明：</h5><p>因为我windows平台 Docker Desktop，和docker toolbox  都安装失败。所以使用linux虚拟机方式 来使用docker</p>
+<p>官方推荐WIN10 64位用户使用 Docker Desktop，但是这个不能选择安装位置，会占用C盘空间。</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>21.SpringBoot整合docker</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:38</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:23:06</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/21.SpringBoot%E6%95%B4%E5%90%88docker/" title="21.SpringBoot整合docker">https://xiaofine1122.github.io/2020/03/21/21.SpringBoot%E6%95%B4%E5%90%88docker/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>

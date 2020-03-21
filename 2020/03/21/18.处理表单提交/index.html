@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>18.处理表单提交 | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="18.处理表单提交 | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-18.处理表单提交" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">18.处理表单提交</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:22:41'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#构建"><span class="toc-text">构建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编码"><span class="toc-text">编码</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#创建实体类"><span class="toc-text">创建实体类</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#创建Controller"><span class="toc-text">创建Controller</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#页面展示层"><span class="toc-text">页面展示层</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#官网地址"><span class="toc-text">官网地址</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,115 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h4><p>IDEA新建项目选择 Web Thymeleaf</p>
+<p>或者添加POM依赖</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-thymeleaf&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre><h4 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h4><h5 id="创建实体类"><a href="#创建实体类" class="headerlink" title="创建实体类"></a>创建实体类</h5><pre><code>public class Greeting {
 
-        </article>
-        
-        
+    private long id;
+    private String content;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+}</code></pre><h5 id="创建Controller"><a href="#创建Controller" class="headerlink" title="创建Controller"></a>创建Controller</h5><pre><code>@Controller
+public class GreetingController {
+
+    @GetMapping(&quot;/greeting&quot;)
+    public String greetingForm(Model model) {
+        model.addAttribute(&quot;greeting&quot;, new Greeting());
+        return &quot;greeting&quot;;
+    }
+
+    @PostMapping(&quot;/greeting&quot;)
+    public String greetingSubmit(@ModelAttribute Greeting greeting) {
+        return &quot;result&quot;;
+    }
+
+}</code></pre><h5 id="页面展示层"><a href="#页面展示层" class="headerlink" title="页面展示层"></a>页面展示层</h5><p>src/main/resources/templates/greeting.html</p>
+<pre><code>&lt;!DOCTYPE HTML&gt;
+&lt;html xmlns:th=&quot;https://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;title&gt;Getting Started: Handling Form Submission&lt;/title&gt;
+    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Form&lt;/h1&gt;
+&lt;form action=&quot;#&quot; th:action=&quot;@{/greeting}&quot; th:object=&quot;${greeting}&quot; method=&quot;post&quot;&gt;
+    &lt;p&gt;Id: &lt;input type=&quot;text&quot; th:field=&quot;*{id}&quot; /&gt;&lt;/p&gt;
+    &lt;p&gt;Message: &lt;input type=&quot;text&quot; th:field=&quot;*{content}&quot; /&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; /&gt; &lt;input type=&quot;reset&quot; value=&quot;Reset&quot; /&gt;&lt;/p&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>结果页面<br>src/main/resources/templates/result.html</p>
+<pre><code>&lt;!DOCTYPE HTML&gt;
+&lt;html xmlns:th=&quot;https://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;title&gt;Getting Started: Handling Form Submission&lt;/title&gt;
+    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Result&lt;/h1&gt;
+&lt;p th:text=&quot;&#39;id: &#39; + ${greeting.id}&quot; /&gt;
+&lt;p th:text=&quot;&#39;content: &#39; + ${greeting.content}&quot; /&gt;
+&lt;a href=&quot;/greeting&quot;&gt;Submit another message&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>启动工程，访问<br><a href="http://localhost:8080/greeting" target="_blank" rel="noopener">http://localhost:8080/greeting</a></p>
+<p><img src="../images/handing1.png" alt="图1"></p>
+<p>提交结果</p>
+<p><img src="../images/handing2.png" alt="图2"></p>
+<h4 id="官网地址"><a href="#官网地址" class="headerlink" title="官网地址"></a>官网地址</h4><p><a href="https://spring.io/guides/gs/handling-form-submission/" target="_blank" rel="noopener">https://spring.io/guides/gs/handling-form-submission/</a></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>18.处理表单提交</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:42</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:22:41</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/18.%E5%A4%84%E7%90%86%E8%A1%A8%E5%8D%95%E6%8F%90%E4%BA%A4/" title="18.处理表单提交">https://xiaofine1122.github.io/2020/03/21/18.%E5%A4%84%E7%90%86%E8%A1%A8%E5%8D%95%E6%8F%90%E4%BA%A4/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>

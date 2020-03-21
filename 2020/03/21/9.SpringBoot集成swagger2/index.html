@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>9.SpringBoot集成swagger2 | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="9.SpringBoot集成swagger2 | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-9.SpringBoot集成swagger2" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">9.SpringBoot集成swagger2</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:21:43'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构建"><span class="toc-text">构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#引入依赖"><span class="toc-text">引入依赖</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#编码"><span class="toc-text">编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#写生产文档的注解"><span class="toc-text">写生产文档的注解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#问题1："><span class="toc-text">问题1：</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,156 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>swagger,中文“拽”的意思。它是一个功能强大的api框架，它的集成非常简单，不仅提供了在线文档的查阅，而且还提供了在线文档的测试。另外swagger很容易构建restful风格的api，简单优雅帅气，正如它的名字。</p>
+<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><h3 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h3><pre><code>&lt;!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;
+    &lt;version&gt;2.9.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;
+    &lt;version&gt;2.9.2&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><h4 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h4><p>写配置类</p>
+<pre><code>@Configuration
+@EnableSwagger2
+public class Swagger2 {
 
-        </article>
-        
-        
+    @Bean
+    public Docket createRestApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage(&quot;com.xiaofine.speingbootswagger.controller&quot;))
+                .paths(PathSelectors.any())
+                .build();
+    }
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title(&quot;springboot利用swagger构建api文档&quot;)
+                .description(&quot;简单优雅的restfun风格&quot;)
+                .termsOfServiceUrl(&quot;&quot;)
+                .version(&quot;1.0&quot;)
+                .build();
+    }
+}</code></pre><p>通过@Configuration注解，表明它是一个配置类，@EnableSwagger2开启swagger2。apiINfo()配置一些基本的信息。apis()指定扫描的包会生成文档。</p>
+<h4 id="写生产文档的注解"><a href="#写生产文档的注解" class="headerlink" title="写生产文档的注解"></a>写生产文档的注解</h4><p>swagger通过注解表明该接口会生成文档，包括接口名、请求方法、参数、返回信息的等等。</p>
+<ul>
+<li>@Api：修饰整个类，描述Controller的作用</li>
+<li>@ApiOperation：描述一个类的一个方法，或者说一个接口</li>
+<li>@ApiParam：单个参数描述</li>
+<li>@ApiModel：用对象来接收参数</li>
+<li>@ApiProperty：用对象接收参数时，描述对象的一个字段</li>
+<li>@ApiResponse：HTTP响应其中1个描述</li>
+<li>@ApiResponses：HTTP响应整体描述</li>
+<li>@ApiIgnore：使用该注解忽略这个API</li>
+<li>@ApiError ：发生错误返回的信息</li>
+<li>@ApiParamImplicitL：一个请求参数</li>
+<li>@ApiParamsImplicit 多个请求参数</li>
+</ul>
+<p>例子</p>
+<pre><code>@RestController
+@RequestMapping(value = &quot;/books&quot;)
+public class BookController {
+
+    Map&lt;Long, Book&gt; books = Collections.synchronizedMap(new HashMap&lt;Long, Book&gt;());
+
+    @ApiOperation(value=&quot;获取图书列表&quot;, notes=&quot;获取图书列表&quot;)
+    @RequestMapping(value={&quot;&quot;}, method= RequestMethod.GET)
+    public List&lt;Book&gt; getBook() {
+        List&lt;Book&gt; book = new ArrayList&lt;&gt;(books.values());
+        return book;
+    }
+
+    @ApiOperation(value=&quot;创建图书&quot;, notes=&quot;创建图书&quot;)
+    @ApiImplicitParam(name = &quot;book&quot;, value = &quot;图书详细实体&quot;, required = true, dataType = &quot;Book&quot;)
+    @RequestMapping(value=&quot;&quot;, method=RequestMethod.POST)
+    public String postBook(@RequestBody Book book) {
+        books.put(book.getId(), book);
+        return &quot;success&quot;;
+    }
+    @ApiOperation(value=&quot;获图书细信息&quot;, notes=&quot;根据url的id来获取详细信息&quot;)
+    @ApiImplicitParam(name = &quot;id&quot;, value = &quot;ID&quot;, required = true, dataType = &quot;Long&quot;,paramType = &quot;path&quot;)
+    @RequestMapping(value=&quot;/{id}&quot;, method=RequestMethod.GET)
+    public Book getBook(@PathVariable Long id) {
+        return books.get(id);
+    }
+
+    @ApiOperation(value=&quot;更新信息&quot;, notes=&quot;根据url的id来指定更新图书信息&quot;)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = &quot;id&quot;, value = &quot;图书ID&quot;, required = true, dataType = &quot;Long&quot;,paramType = &quot;path&quot;),
+            @ApiImplicitParam(name = &quot;book&quot;, value = &quot;图书实体book&quot;, required = true, dataType = &quot;Book&quot;)
+    })
+    @RequestMapping(value=&quot;/{id}&quot;, method= RequestMethod.PUT)
+    public String putUser(@PathVariable Long id, @RequestBody Book book) {
+        Book book1 = books.get(id);
+        book1.setName(book.getName());
+        book1.setPrice(book.getPrice());
+        books.put(id, book1);
+        return &quot;success&quot;;
+    }
+    @ApiOperation(value=&quot;删除图书&quot;, notes=&quot;根据url的id来指定删除图书&quot;)
+    @ApiImplicitParam(name = &quot;id&quot;, value = &quot;图书ID&quot;, required = true, dataType = &quot;Long&quot;,paramType = &quot;path&quot;)
+    @RequestMapping(value=&quot;/{id}&quot;, method=RequestMethod.DELETE)
+    public String deleteUser(@PathVariable Long id) {
+        books.remove(id);
+        return &quot;success&quot;;
+    }
+
+    @ApiIgnore//使用该注解忽略这个API
+    @RequestMapping(value = &quot;/hi&quot;, method = RequestMethod.GET)
+    public String  jsonTest() {
+        return &quot; hi you!&quot;;
+    }
+}</code></pre><p>通过相关注解，就可以让swagger2生成相应的文档。如果你不需要某接口生成文档，只需要在加@ApiIgnore注解即可。需要说明的是，如果请求参数在url上，@ApiImplicitParam 上加paramType = “path” 。</p>
+<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>启动工程，访问：<a href="http://localhost:8080/swagger-ui.html" target="_blank" rel="noopener">http://localhost:8080/swagger-ui.html</a> ，就看到swagger-ui:<br><img src="../images/swagger1.png" alt="图1"></p>
+<p>整个集成过程非常简单，但是我看了相关的资料，swagger没有做安全方面的防护，可能需要我们自己做相关的工作。</p>
+<h5 id="问题1："><a href="#问题1：" class="headerlink" title="问题1："></a>问题1：</h5><p>访问首页时控制台会报错<br>说是因为<br>@ApiModelProperty的问题<br>但是我没用这个注释<br>最后增加POM依赖解决</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;io.swagger&lt;/groupId&gt;
+    &lt;artifactId&gt;swagger-annotations&lt;/artifactId&gt;
+    &lt;version&gt;1.5.22&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.swagger&lt;/groupId&gt;
+    &lt;artifactId&gt;swagger-models&lt;/artifactId&gt;
+    &lt;version&gt;1.5.22&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><p>错误位置<br>swagger-models-1.5.20.jar!\io\swagger\models\parameters\AbstractSerializableParameter.class<br><img src="../images/swagger2.png" alt="图2"></p>
+<p>在1.5.22中解决了<br>swagger-models-1.5.22.jar!\io\swagger\models\parameters\AbstractSerializableParameter.class<br><img src="../images/swagger3.png" alt="图3"></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>9.SpringBoot集成swagger2</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:51</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:21:43</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/9.SpringBoot%E9%9B%86%E6%88%90swagger2/" title="9.SpringBoot集成swagger2">https://xiaofine1122.github.io/2020/03/21/9.SpringBoot%E9%9B%86%E6%88%90swagger2/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>

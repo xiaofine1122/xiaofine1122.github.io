@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>5.SpringBoot开启声明式事务 | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="5.SpringBoot开启声明式事务 | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-5.SpringBoot开启声明式事务" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">5.SpringBoot开启声明式事务</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:21:18'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构建"><span class="toc-text">构建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#编码"><span class="toc-text">编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#问题1："><span class="toc-text">问题1：</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,87 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>springboot开启事务很简单，只需要一个注解@Transactional 就可以了。因为在springboot中已经默认对jpa、jdbc、mybatis开启了事事务，引入它们依赖的时候，事物就默认开启。当然，如果你需要用其他的orm，比如beatlsql，就需要自己配置相关的事物管理器。</p>
+<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><p>项目在之前整合mybatis工程的基础上<br>本编基于xml实现mybatis的数据访问层，并开启声明式事务。</p>
+<h4 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h4><p>dao层</p>
+<pre><code>public interface UserMapper2 {
+    int update(@Param(&quot;name&quot;) String name,@Param(&quot;id&quot;) int id);
+}</code></pre><p>对应mapper</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+&lt;mapper namespace=&quot;com.xiaofine.springbootmybatis.dao.UserMapper2&quot;&gt;
+    &lt;update id=&quot;update&quot;&gt;
+        UPDATE user set name=#{name} WHERE id=#{id}
+    &lt;/update&gt;
+&lt;/mapper&gt;</code></pre><p>service层</p>
+<pre><code>@Service
+public class UserService2 {
 
-        </article>
-        
-        
+    @Autowired()
+    private UserMapper2 userMapper2;
+
+    @Transactional
+    public void transfer() throws RuntimeException{
+        userMapper2.update(&quot;22235111566&quot;,1);
+        int i=1/0;
+        userMapper2.update(&quot;333&quot;,2);
+    }
+
+}</code></pre><p>controller层</p>
+<pre><code>@RestController()
+@RequestMapping(&quot;/user&quot;)
+@MapperScan(&quot;com.xiaofine.springbootmybatis.dao&quot;)
+public class UserController2 {
+
+    @Autowired
+    UserService2 userService2;
+
+    @RequestMapping(&quot;/transfer&quot;)
+    public void transfer(){
+        userService2.transfer();
+    }
+}</code></pre><h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>保存时 不修改id为1的user的内容，也不修改id为2的user。<br>去掉@Transactional id为1的的user.name修改了，id为2的没有修改</p>
+<h4 id="问题1："><a href="#问题1：" class="headerlink" title="问题1："></a>问题1：</h4><p>当@Transactional事务不生效的时候，可以遵循以下排查步骤：</p>
+<p>1、查看数据库或表，设置的引擎。MyISAM是不支持事务的，必须改为InnoDb。</p>
+<p>2、@Transactional注解的方法是否为public。</p>
+<p>如果应用在protected、private或者 package的方法上，不会报错，但是事务设置不会起作用。</p>
+<p>3、@Transactional所注解的方法所在的类，是否已经使用了注解@Service或@Component等。</p>
+<p>4、需要调用该方法，且需要支持事务特性的调用方，是在 @Transactional所在的类的外面。</p>
+<p>注意：类内部的其他方法调用这个注解了@Transactional的方法，事务是不会起作用的。</p>
+<p>5、注解为事务范围的方法中，事务的回滚仅仅对于unchecked的异常有效。对于checked异常无效。也就是说事务回滚仅仅发生在</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>5.SpringBoot开启声明式事务</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:55</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:21:18</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/5.SpringBoot%E5%BC%80%E5%90%AF%E5%A3%B0%E6%98%8E%E5%BC%8F%E4%BA%8B%E5%8A%A1/" title="5.SpringBoot开启声明式事务">https://xiaofine1122.github.io/2020/03/21/5.SpringBoot%E5%BC%80%E5%90%AF%E5%A3%B0%E6%98%8E%E5%BC%8F%E4%BA%8B%E5%8A%A1/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>

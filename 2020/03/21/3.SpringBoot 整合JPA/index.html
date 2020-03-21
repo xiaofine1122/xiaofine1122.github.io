@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>3.SpringBoot 整合JPA | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="3.SpringBoot 整合JPA | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-3.SpringBoot 整合JPA" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">3.SpringBoot 整合JPA</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:21:06'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构建"><span class="toc-text">构建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#初始化"><span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置文件"><span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编码"><span class="toc-text">编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#问题1："><span class="toc-text">问题1：</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,145 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>JPA全称Java Persistence API.JPA通过JDK 5.0注解或XML描述对象－关系表的映射关系，并将运行期的实体对象持久化到数据库中。</p>
+<p>JPA 的目标之一是制定一个可以由很多供应商实现的API，并且开发人员可以编码来实现该API，而不是使用私有供应商特有的API。</p>
+<p>JPA是需要Provider来实现其功能的，Hibernate就是JPA Provider中很强的一个，应该说无人能出其右。从功能上来说，JPA就是Hibernate功能的一个子集。</p>
+<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>选择 web SpringDataJPA  Mysql</p>
+<p>或者maven引入</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
 
-        </article>
-        
-        
+&lt;dependency&gt;
+    &lt;groupId&gt;mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre><p>最后添加druid连接池</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+    &lt;artifactId&gt;druid&lt;/artifactId&gt;
+    &lt;version&gt;1.1.21&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><p>application.yml</p>
+<pre><code>spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://192.168.1.107:3306/entity?serverTimezone=GMT%2B8&amp;useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true</code></pre><p><strong>注意</strong>，如果通过jpa在数据库中建表，将jpa.hibernate,ddl-auto改为create，建完表之后，要改为update,要不然每次重启工程会删除表并新建。</p>
+<h4 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h4><pre><code>@Entity
+public class User {
+
+    //@Id表明id， @GeneratedValue 字段自动生成
+    @Id
+    @GeneratedValue
+    private int id;
+
+    private String name ;
+
+    private String email;
+
+    //省略了setter getter tostring
+}</code></pre><p>dao</p>
+<pre><code>public interface UserDao extends JpaRepository&lt;User,Integer&gt; {}</code></pre><p>省略了server层 实际开发时不能省略</p>
+<p>controller</p>
+<pre><code>@RestController
+@RequestMapping(&quot;/user&quot;)
+public class UserController {
+
+    @Autowired
+    UserDao userDao;
+
+    @RequestMapping(value = &quot;&quot;,method = RequestMethod.POST)
+    public String addUser(@RequestParam(value = &quot;name&quot;)String name,
+                   @RequestParam(value = &quot;email&quot;)String email){
+        User user =new User();
+        user.setName(name);
+        user.setEmail(email);
+
+        User user1 = userDao.saveAndFlush(user);
+        return user1.toString();
+    }
+
+    @RequestMapping(value=&quot;/{id}&quot;,method = RequestMethod.PUT)
+    public String updateUser(@PathVariable(&quot;id&quot;) int id ,
+                             @RequestParam(value = &quot;name&quot;,required = true)String name,
+                             @RequestParam(value = &quot;email&quot;,required = true) String email){
+        User user =new User();
+        user.setId(id);
+        user.setName(name);
+        user.setEmail(email);
+        User user1 = userDao.saveAndFlush(user);
+        return user1.toString();
+    }
+
+    @RequestMapping(value = &quot;/{id}&quot;,method = RequestMethod.GET)
+    public User getUserById(@PathVariable(&quot;id&quot;) int id){
+        //        return .orElse(null).toString();
+
+        return userDao.findById(id).orElse(null);
+//        Optional&lt;User&gt; user = userDao.findById(id);
+//        if (user.isPresent()){
+//            return user.get();
+//        }else {
+//            return null;
+//        }
+    }
+
+    @RequestMapping(value=&quot;list&quot;,method = RequestMethod.GET)
+    public List&lt;User&gt; getUsers(){
+        return userDao.findAll();
+    }
+}</code></pre><h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>使用postman 或者IDEA自带的 IDEA REST Client</p>
+<h5 id="问题1："><a href="#问题1：" class="headerlink" title="问题1："></a>问题1：</h5><p>在2.0以上版本中，CrudRepository接口的findOne(T id)方法已经被移除。<br>所以使用 Optional<User> user = userDao.findById(id);<br>Optional 需要判断是否为空使用 .isPresent()<br>.get() 提取其中的对象</p>
+<pre><code>Optional&lt;User&gt; user = userDao.findById(id);
+if (user.isPresent()){   
+return user.get();
+}else {    
+return null;
+}</code></pre><p>或者</p>
+<pre><code>userDao.findById(id).orElse(null);</code></pre>
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>3.SpringBoot 整合JPA</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:57</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:21:06</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/3.SpringBoot%20%E6%95%B4%E5%90%88JPA/" title="3.SpringBoot 整合JPA">https://xiaofine1122.github.io/2020/03/21/3.SpringBoot%20%E6%95%B4%E5%90%88JPA/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>

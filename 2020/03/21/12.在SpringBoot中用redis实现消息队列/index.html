@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>12.在SpringBoot中用redis实现消息队列 | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="12.在SpringBoot中用redis实现消息队列 | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-12.在SpringBoot中用redis实现消息队列" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">12.在SpringBoot中用redis实现消息队列</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:22:05'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#前提"><span class="toc-text">前提</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构建"><span class="toc-text">构建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#引入的依赖"><span class="toc-text">引入的依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编码"><span class="toc-text">编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试代码"><span class="toc-text">测试代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#官方文档"><span class="toc-text">官方文档</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,105 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h4><p>项目在之前的集成redis基础上</p>
+<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><h4 id="引入的依赖"><a href="#引入的依赖" class="headerlink" title="引入的依赖"></a>引入的依赖</h4><pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre><h4 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h4><p>创建一个消息接收者</p>
+<pre><code>public class Receiver {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Receiver.class);
 
-        </article>
-        
-        
+    private AtomicInteger counter = new AtomicInteger();
+
+    public void receiveMessage(String message) {
+        LOGGER.info(&quot;Received &lt;&quot; + message + &quot;&gt;&quot;);
+        counter.incrementAndGet();
+    }
+
+    public int getCount() {
+        return counter.get();
+    }
+}</code></pre><p>注入消息接收者</p>
+<pre><code>@Bean
+Receiver receiver() {
+    return new Receiver();
+}
+
+@Bean
+StringRedisTemplate template(RedisConnectionFactory connectionFactory) {
+    return new StringRedisTemplate(connectionFactory);
+}</code></pre><p>在spring data redis中，利用redis发送一条消息和接受一条消息，需要三样东西：</p>
+<ul>
+<li>一个连接工厂</li>
+<li>一个消息监听容器</li>
+<li>Redis template</li>
+</ul>
+<p>注入消息监听容器</p>
+<pre><code>@Bean
+RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
+                                        MessageListenerAdapter listenerAdapter) {
+
+    RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+    container.setConnectionFactory(connectionFactory);
+    container.addMessageListener(listenerAdapter, new PatternTopic(&quot;chat&quot;));
+
+    return container;
+}</code></pre><h4 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h4><p>在springboot入口的main方法：</p>
+<pre><code>public static void main(String[] args) throws Exception {
+    ApplicationContext ctx = SpringApplication.run(SpringbootRedisApplication.class, args);
+
+    StringRedisTemplate template = ctx.getBean(StringRedisTemplate.class);
+    Receiver receiver = ctx.getBean(Receiver.class);
+
+    while (receiver.getCount() == 0) {
+
+        LOGGER.info(&quot;Sending message...&quot;);
+        template.convertAndSend(&quot;chat&quot;, &quot;Hello from Redis!&quot;);
+        try {
+            Thread.sleep(500L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    System.exit(0);
+}</code></pre><p>先用redisTemplate发送一条消息，接收者接收到后，打印出来。启动springboot程序，控制台打印：</p>
+<pre><code>2020-03-15 10:34:24.154  INFO 1028 --- [           main] c.x.s.SpringbootRedisApplication         : Sending message...
+2020-03-15 10:34:24.165  INFO 1028 --- [    container-2] c.x.springbootredis.message.Receiver     : Received &lt;Hello from Redis!&gt;
+2020-03-15 10:34:24.672  INFO 1028 --- [extShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService &#39;applicationTaskExecutor&#39;
+</code></pre><p>测试通过，接收者确实接收到了发送者的消息。</p>
+<h4 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h4><p><a href="https://spring.io/guides/gs/messaging-redis/" target="_blank" rel="noopener">https://spring.io/guides/gs/messaging-redis/</a></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>12.在SpringBoot中用redis实现消息队列</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:48</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:22:05</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/12.%E5%9C%A8SpringBoot%E4%B8%AD%E7%94%A8redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" title="12.在SpringBoot中用redis实现消息队列">https://xiaofine1122.github.io/2020/03/21/12.%E5%9C%A8SpringBoot%E4%B8%AD%E7%94%A8redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>

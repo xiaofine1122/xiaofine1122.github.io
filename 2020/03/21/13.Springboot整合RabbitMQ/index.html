@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>xiaofine的博客</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="xiaofine的博客">
+  <title>13.Springboot整合RabbitMQ | xiaofine的博客</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="13.Springboot整合RabbitMQ | xiaofine的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="简介spring boot 它的设计目的就是为例简化开发，开启了各种自动装配，你不想写各种配置文件，引入相关的依赖就能迅速搭建起一个web工程。它采用的是建立生产就绪的应用程序观点，优先于配置的惯例。可能你有很多理由不放弃SSM,SSH，但是当你一旦使用了springboot ,你会觉得一切变得简单了，配置变的简单了、编码变的简单了，部署变的简单了，感觉自己健步如飞，开发速度大大提高了。 构建使用">
 <meta property="og:type" content="article">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -362,12 +362,55 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-13.Springboot整合RabbitMQ" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于本博客"><span class="toc-text">关于本博客</span></a></li></ol>
+        <h1 class="article-title">13.Springboot整合RabbitMQ</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="SpringBoot">SpringBoot</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-21 22:22:10'>2020-03-21 21:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构建"><span class="toc-text">构建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#配置连接RabbitMQ"><span class="toc-text">配置连接RabbitMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#创建消息接收者"><span class="toc-text">创建消息接收者</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#创建消息监听，并发送一条消息"><span class="toc-text">创建消息监听，并发送一条消息</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -380,13 +423,135 @@
     }
 </style>
 </div>
-            <h2 id="关于本博客"><a href="#关于本博客" class="headerlink" title="关于本博客"></a>关于本博客</h2><p>记录学习的内容，主要作为笔记以及分享用。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>整合RabbitMQ服务器，并且通过它怎么去发送和接收消息。我将构建一个springboot工程，通过RabbitTemplate去通过MessageListenerAdapter去订阅一个POJO类型的消息。</p>
+<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><p>IDEA 新建选择 Messaging RabbitMQ</p>
+<p>或者引入依赖</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-amqp&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre><h4 id="配置连接RabbitMQ"><a href="#配置连接RabbitMQ" class="headerlink" title="配置连接RabbitMQ"></a>配置连接RabbitMQ</h4><pre><code>spring.rabbitmq.host=192.168.1.107
+spring.rabbitmq.username=guest
+spring.rabbitmq.password=guest</code></pre><h5 id="创建消息接收者"><a href="#创建消息接收者" class="headerlink" title="创建消息接收者"></a>创建消息接收者</h5><p>在任何的消息队列程序中，你需要创建一个消息接收者，用于响应发送的消息。</p>
+<pre><code>@Component
+public class Receiver {
+    private CountDownLatch latch = new CountDownLatch(1);
+    public void receiveMessage(String message) {
+        System.out.println(&quot;Received &lt;&quot; + message + &quot;&gt;&quot;);
+        latch.countDown();
+    }
+    public CountDownLatch getLatch() {
+        return latch;
+    }
+}</code></pre><p>消息接收者是一个简单的POJO类，它定义了一个方法去接收消息，当你注册它去接收消息，你可以给它取任何的名字。其中，它有CountDownLatch这样的一个类，它是用于告诉发送者消息已经收到了，你不需要在应用程序中具体实现它，只需要latch.countDown()就行了。</p>
+<h5 id="创建消息监听，并发送一条消息"><a href="#创建消息监听，并发送一条消息" class="headerlink" title="创建消息监听，并发送一条消息"></a>创建消息监听，并发送一条消息</h5><p>在spring程序中，RabbitTemplate提供了发送消息和接收消息的所有方法。你只需简单的配置下就行了：</p>
+<ul>
+<li><p>需要一个消息监听容器</p>
+</li>
+<li><p>声明一个quene,一个exchange,并且绑定它们</p>
+</li>
+<li><p>一个组件去发送消息</p>
+<pre><code>@SpringBootApplication
+public class SpringbootRabbitmqApplication {
 
-        </article>
-        
-        
+  static final String topicExchangeName = &quot;spring-boot-exchange&quot;;
+
+  static final String queueName = &quot;spring-boot&quot;;
+
+  @Bean
+  Queue queue() {
+      return new Queue(queueName, false);
+  }
+
+  @Bean
+  TopicExchange exchange() {
+      return new TopicExchange(topicExchangeName);
+  }
+
+  @Bean
+  Binding binding(Queue queue, TopicExchange exchange) {
+      return BindingBuilder.bind(queue).to(exchange).with(&quot;foo.bar.#&quot;);
+  }
+
+  @Bean
+  SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
+                                           MessageListenerAdapter listenerAdapter) {
+      SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+      container.setConnectionFactory(connectionFactory);
+      container.setQueueNames(queueName);
+      container.setMessageListener(listenerAdapter);
+      return container;
+  }
+
+  @Bean
+  MessageListenerAdapter listenerAdapter(Receiver receiver) {
+      return new MessageListenerAdapter(receiver, &quot;receiveMessage&quot;);
+  }
+
+  public static void main(String[] args) {
+      SpringApplication.run(SpringbootRabbitmqApplication.class, args);
+  }
+</code></pre></li>
+</ul>
+<p>}</p>
+<pre><code>#### 创建测试方法</code></pre><p>@Component<br>public class Runner implements CommandLineRunner {</p>
+<pre><code>private final RabbitTemplate rabbitTemplate;
+private final Receiver receiver;
+private final ConfigurableApplicationContext context;
+
+public Runner(Receiver receiver, RabbitTemplate rabbitTemplate,
+              ConfigurableApplicationContext context) {
+    this.receiver = receiver;
+    this.rabbitTemplate = rabbitTemplate;
+    this.context = context;
+}
+
+@Override
+public void run(String... args) throws Exception {
+    System.out.println(&quot;Sending message...&quot;);
+    rabbitTemplate.convertAndSend(SpringbootRabbitmqApplication.queueName, &quot;Hello from RabbitMQ!&quot;);
+    receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
+    context.close();
+}</code></pre><p>}</p>
+<pre><code>启动服务发现控制台输出，测试成功</code></pre><p>Sending message…<br>Received &lt;Hello from RabbitMQ!&gt;</p>
+<pre><code>
+#### 官网地址
+
+https://spring.io/guides/gs/messaging-rabbitmq/
+
+
+
+</code></pre>
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>13.Springboot整合RabbitMQ</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="xiaofine">xiaofine</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:47:47</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-21, 22:22:10</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/13.Springboot%E6%95%B4%E5%90%88RabbitMQ/" title="13.Springboot整合RabbitMQ">https://xiaofine1122.github.io/2020/03/21/13.Springboot%E6%95%B4%E5%90%88RabbitMQ/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">©2020-2021 xiaofine1122</p>
